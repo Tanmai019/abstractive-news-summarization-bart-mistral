@@ -1,19 +1,95 @@
 # Abstractive News Summarization with BART and Mistral
 
-This repository contains my NLP course project on abstractive news summarization using transformer models. The work compares pretrained and LoRA fine-tuned versions of `facebook/bart-large-cnn` and `mistralai/Mistral-7B-Instruct-v0.2` on a 3,000-sample subset of the CNN/DailyMail dataset.
+Transformer-based abstractive news summarization project comparing pretrained and LoRA fine-tuned versions of BART and Mistral on the CNN/DailyMail dataset using ROUGE and BERTScore evaluation metrics.
 
-The project was completed for `EDS 6397 - Natural Language Processing` at the University of Houston and focuses on how model architecture and parameter-efficient fine-tuning affect summarization quality.
+Developed as part of graduate NLP coursework at the University of Houston, with emphasis on transformer architectures, parameter-efficient fine-tuning, and summarization evaluation.
 
-## Project Overview
+---
 
-The goal of this project was to generate concise, coherent summaries for long-form news articles and compare the performance of:
+# Tech Stack
+
+`Python` `PyTorch` `Transformers` `Hugging Face` `LoRA` `PEFT` `BART` `Mistral` `NLP` `ROUGE` `BERTScore`
+
+---
+
+# Project Overview
+
+This project explores how modern transformer architectures generate concise and semantically meaningful summaries from long-form news articles. Multiple summarization workflows were implemented and evaluated using both pretrained and parameter-efficient fine-tuned language models.
+
+The project compares:
 
 - Pretrained BART
-- LoRA fine-tuned BART
+- LoRA Fine-Tuned BART
 - Pretrained Mistral
-- LoRA fine-tuned Mistral
+- LoRA Fine-Tuned Mistral
 
-The evaluation used standard summarization metrics:
+The evaluation focused on summarization quality, semantic preservation, and generation coherence using standard NLP evaluation metrics.
+
+---
+
+# Dataset
+
+- Dataset: CNN/DailyMail News Summarization Dataset
+- Working subset: 3,000 news articles
+- Split strategy: 80% training / 20% testing
+
+The dataset contains long-form news articles paired with human-written summaries and is commonly used for benchmarking abstractive summarization systems.
+
+---
+
+# Approach
+
+## 1. Data Preprocessing
+
+The preprocessing pipeline included:
+
+- HTML tag removal
+- Unicode normalization
+- Text cleaning and whitespace normalization
+- Conversion into Hugging Face `Dataset` objects
+- Tokenization and sequence preparation
+
+---
+
+## 2. Modeling
+
+### BART Pipeline
+
+Base model:
+```python
+facebook/bart-large-cnn
+```
+
+Key configurations:
+- Beam search decoding
+- Maximum input length: 1024
+- Maximum summary length: 150
+- LoRA-based parameter-efficient fine-tuning
+
+The BART workflow leveraged encoder-decoder transformer architecture optimized for abstractive summarization tasks.
+
+---
+
+### Mistral Pipeline
+
+Base model:
+```python
+mistralai/Mistral-7B-Instruct-v0.2
+```
+
+Key configurations:
+- Instruction-style prompting
+- 4-bit quantization for memory optimization
+- LoRA fine-tuning on attention projection layers
+- GPU-aware experimentation workflow
+
+The Mistral workflow explored decoder-only LLM summarization behavior under parameter-efficient tuning strategies.
+
+---
+
+# Evaluation Metrics
+
+The generated summaries were evaluated using:
 
 - `ROUGE-1`
 - `ROUGE-2`
@@ -21,38 +97,9 @@ The evaluation used standard summarization metrics:
 - `ROUGE-Lsum`
 - `BERTScore (F1)`
 
-## Dataset
+---
 
-- Dataset: CNN/DailyMail news summarization dataset
-- Working subset: 3,000 records
-- Split strategy: 80% training and 20% testing
-- Source used in notebooks: Kaggle-hosted copy of the dataset
-
-## Approach
-
-### 1. Preprocessing
-
-- Removed HTML tags
-- Normalized Unicode text
-- Cleaned whitespace and punctuation artifacts
-- Converted records into Hugging Face `Dataset` objects
-
-### 2. Modeling
-
-#### BART pipeline
-
-- Base model: `facebook/bart-large-cnn`
-- Summarization setup: beam search, max input length of 1024, max summary length of 150
-- Fine-tuning: LoRA adapters on the seq2seq architecture
-
-#### Mistral pipeline
-
-- Base model: `mistralai/Mistral-7B-Instruct-v0.2`
-- Prompted as an instruction-following summarization task
-- 4-bit quantization used to fit GPU constraints
-- Fine-tuning: LoRA adapters on decoder attention projections
-
-## Results
+# Results
 
 | Model | ROUGE-1 | ROUGE-2 | ROUGE-L | ROUGE-Lsum | BERTScore (F1) |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -61,14 +108,32 @@ The evaluation used standard summarization metrics:
 | Pretrained Mistral | 0.12 | 0.07 | 0.09 | 0.09 | 0.82 |
 | Fine-Tuned Mistral | 0.17 | 0.08 | 0.12 | 0.15 | 0.83 |
 
-### Key Takeaways
+---
 
-- BART delivered the strongest overall summarization performance.
-- LoRA fine-tuning produced measurable gains for both model families.
-- Mistral improved after fine-tuning, but still trailed BART on all reported metrics.
-- The project showed that parameter-efficient tuning can improve summarization quality without full-model retraining.
+# Key Takeaways
 
-## Repository Structure
+- BART achieved the strongest overall summarization performance across all evaluation metrics.
+- LoRA fine-tuning produced measurable improvements for both transformer architectures.
+- Mistral demonstrated improved semantic generation after fine-tuning, though performance remained below BART.
+- Parameter-efficient fine-tuning proved effective for improving summarization quality without requiring full-model retraining.
+- Quantization and LoRA workflows enabled experimentation with large language models under limited compute constraints.
+
+---
+
+# Skills Demonstrated
+
+- Transformer-based NLP workflows
+- Parameter-efficient fine-tuning (LoRA)
+- Summarization model evaluation
+- Prompt engineering for LLMs
+- GPU-aware experimentation
+- Hugging Face ecosystem usage
+- Quantization and memory optimization
+- Comparative model analysis
+
+---
+
+# Repository Structure
 
 ```text
 .
@@ -85,60 +150,85 @@ The evaluation used standard summarization metrics:
 └── README.md
 ```
 
-## Important Files
+---
 
-### Notebooks
+# Important Files
+
+## Notebooks
 
 - `notebooks/bart/bart_pretrained_and_lora.ipynb`
 - `notebooks/mistral/mistral_pretrained.ipynb`
 - `notebooks/mistral/mistral_lora_finetuned.ipynb`
 - `notebooks/analysis/mistral_fine_tune_graph.ipynb`
 
-### Documentation
+---
 
-- Final report: `docs/reports/final-report.pdf`
-- Proposal: `docs/proposal/news-summarization-proposal.pdf`
+## Documentation
 
-### Supporting Files
+- Final Report: `docs/reports/final-report.pdf`
+- Project Proposal: `docs/proposal/news-summarization-proposal.pdf`
 
-- Example input article: `examples/sample-news-article.docx`
-- Notebook sanitizing helper: `scripts/sanitize_notebooks.jq`
-- Notebook polishing helper: `scripts/polish_notebook.jq`
+---
 
-## Reproducing the Work
+## Supporting Files
 
-These notebooks were originally developed in Google Colab and Kaggle-style environments, so GPU access is strongly recommended. The repository is best viewed as a cleaned archive of the course project and report rather than a packaged, one-command training pipeline.
+- Example Input Article: `examples/sample-news-article.docx`
+- Notebook Sanitizing Helper: `scripts/sanitize_notebooks.jq`
+- Notebook Formatting Helper: `scripts/polish_notebook.jq`
 
-1. Create a Python environment and install dependencies from `requirements.txt`.
-2. Configure Kaggle access. The BART and pretrained Mistral notebooks still use `kaggle.json` upload cells, while the Mistral LoRA notebook reads `KAGGLE_USERNAME` and `KAGGLE_KEY` from environment variables.
-3. If running the Mistral notebooks, provide a Hugging Face access token through `HUGGINGFACE_TOKEN`.
-4. Open the notebooks in Colab, Kaggle, or Jupyter and run the cells in sequence.
-5. Expect a few environment-specific cells to need light adjustment outside Colab, especially cells that use `google.colab`, interactive uploads, or file download helpers.
+---
 
-Example environment variables:
+# Reproducing the Project
+
+These experiments were developed primarily in GPU-enabled notebook environments such as Google Colab and Kaggle.
+
+## Setup
+
+1. Create a Python environment
+2. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Configure Kaggle credentials:
 
 ```bash
 export KAGGLE_USERNAME="your_kaggle_username"
 export KAGGLE_KEY="your_kaggle_key"
+```
+
+4. Configure Hugging Face access:
+
+```bash
 export HUGGINGFACE_TOKEN="your_hf_token"
 ```
 
-## Limitations
+5. Open the notebooks in Colab, Kaggle, or Jupyter and run the cells sequentially.
 
-- The experiments used a reduced 3,000-record subset due to compute limits.
-- Training large models on Google Colab introduced memory and runtime constraints.
-- The work relied on automatic metrics rather than human evaluation.
-- Mistral fine-tuning was more sensitive to setup and hyperparameter choices.
+---
 
-## Future Improvements
+# Limitations
 
-- Train on a larger portion of the dataset
-- Run longer fine-tuning schedules for Mistral
-- Add human evaluation for fluency and factual consistency
-- Package the best model into a cleaner demo application
+- Experiments were conducted on a reduced subset due to compute limitations.
+- Large-model experimentation introduced GPU memory and runtime constraints.
+- Evaluation relied primarily on automated summarization metrics.
+- Decoder-only LLM fine-tuning required careful tuning and optimization strategies.
 
-## Notes
+---
 
-- Notebook outputs were cleared and sensitive tokens were removed before preparing this repository for GitHub.
-- The main notebooks were lightly polished with intro cells so the repo is easier to browse in GitHub.
-- This repository preserves the original project artifacts in a cleaner portfolio-friendly layout, but the notebooks still reflect the original Colab/Kaggle workflow.
+# Future Improvements
+
+- Train on larger dataset subsets
+- Add human evaluation for factual consistency and fluency
+- Benchmark against additional LLM architectures
+- Explore retrieval-augmented summarization workflows
+- Deploy the best-performing model as an interactive application
+
+---
+
+# Notes
+
+- Notebook outputs and sensitive tokens were removed before publishing.
+- The repository preserves the original experimentation workflow while improving structure and readability for portfolio presentation.
+- Some notebooks still contain environment-specific Colab/Kaggle utility cells.
